@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.xiangzi.grpc</groupId>
+		<artifactId>grpc-examples</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>grpc-first</artifactId>
+	<packaging>pom</packaging>
+	<name>grpc-first</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<file.encoding>UTF-8</file.encoding>
+	</properties>
+
+	<modules>
+		<module>grpc-first-generate</module>
+		<module>grpc-first-service</module>
+		<module>grpc-first-client</module>
+		<module>grpc-first-api</module>
+	</modules>
+
+</project>

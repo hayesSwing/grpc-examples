@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.xiangzi.grpc</groupId>
+		<artifactId>grpc-first</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>grpc-first-generate</artifactId>
+	<name>grpc-first-generate</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<file.encoding>UTF-8</file.encoding>
+		<protobuf.version>3.11.1</protobuf.version>
+		<grpc.version>1.26.0</grpc.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>${protobuf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-all</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<extensions>
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId><!--生成平台无关的属性,引入操作系统os设置的属性插件,否则${os.detected.classifier} 
+					操作系统版本会找不到 -->
+				<version>1.6.2</version>
+			</extension>
+		</extensions>
+		<plugins>
+			<!--添加编译proto文件的编译程序和对应的编译插件,执行Protocol Buffers命令并生成Stub代码库 -->
+			<plugin>
+				<groupId>org.xolstice.maven.plugins</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<version>0.6.1</version>
+				<configuration>
+					<!--<protoSourceRoot>${basedir}/src/main/proto</protoSourceRoot>-->
+					<!--默认的proto文件路径 -->
+					<!--Protobuf compiler artifact specification, in groupId:artifactId:version[:type[:classifier]] 
+						format. When this parameter is set, the plugin attempts to resolve the specified 
+						artifact as protoc executable. -->
+					<!--os.detected.classifier 变量来源：https://github.com/trustin/os-maven-plugin -->
+					<protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+					<pluginId>grpc-java</pluginId>
+					<pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>compile-custom</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

@@ -1,0 +1,87 @@
+gRPC 一开始由 google 开发，是一款语言中立、平台中立、开源的远程过程调用(RPC)系统。
+
+gPRC 的一个很明显的优势是它使用了二进制编码，所以它比 JSON/HTTP 更快。虽然说速度越快越好，但我们也要考虑另外两个因素：清晰的接口规范和对流式传输的支持。
+
+尽管开发 gRPC API 在前期需要做更多的工作，但拥有清晰的 API 定义和对流式传输的支持对我们来说更重要。在构建新的内部服务时，gRPC 将会是我们的首选。
+
+
+gRPC 官方文档中文版
+http://doc.oschina.net/grpc
+
+https://www.grpc.io/docs/
+
+
+grpc-microservices
+https://github.com/kasun04/grpc-microservices
+
+grpc-java
+https://github.com/grpc/grpc-java
+
+
+gRPC 的基本介绍：
+https://platformlab.stanford.edu/Seminar Talks/gRPC.pdf
+
+设计愿景：
+https://grpc.io/blog/principles/?spm=ata.13261165.0.0.2be55017XbUhs8
+
+Coverage & Simplicity，协议设计和框架实现要足够通用和简单，能运行在任何设备之上，甚至一些资源首先的如 IoT、Mobile 等设备。
+Interoperability & Reach，要构建在更通用的协议之上，协议本身要能被网络上几乎所有的基础设施所支持。
+General Purpose & Performant，要在场景和性能间做好平衡，首先协议本身要是适用于各种场景的，同时也要尽量有高的性能。
+Payload Agnostic，协议上传输的负载要保持语言和平台中立。
+Streaming，要支持 Request - Response、Request - Stream、Bi-Steam 等通信模型。
+Flow Control，协议自身具备流量感知和限制的能力。
+Metadata Exchange，在 RPC 服务定义之外，提供额外附加数据传输的能力。
+
+总的来说，在这样的设计理念指导下，gRPC 最终被设计为一个跨语言、跨平台的、通用的、高性能的、基于 HTTP/2 的 RPC 协议和框架。
+
+
+Protocol buffers (Protobuf) 是 Google 推出的一个跨平台、语言中立的结构化数据描述和序列化的产品，它定义了一套结构化数据定义的协议，同时也提供了相应的 Compiler 工具，用来将语言中立的描述转化为相应语言的具体描述。
+它的一些特性包括：
+跨语言 跨平台，语言中立的数据描述格式，默认提供了生成多种语言的 Compiler 工具。
+安全性，由于反序列化的范围和输出内容格式都是 Compiler 在编译时预生成的，因此绕过了类似 Java Deserialization Vulnarability 的问题。
+二进制 高性能
+强类型
+字段变更向后兼容
+
+除了结构化数据描述之外，Protobuf 还支持定义 RPC 服务，它允许我们定义一个 .proto 的服务描述文件，进而利用 Protobuf Compiler 工具生成特定语言和 RPC 框架的接口和 stub。
+后续将要具体讲到的 gRPC + Protobuf、Dubbo-gRPC + Protobuf 以及 Dubbo + Protobuf 都是通过定制 Compiler 类实现的。
+
+
+
+java反序列化漏洞（java deserialization vulnerability）
+
+
+Dubbo 在跨语言和协议穿透性方向的探索：支持 HTTP/2 gRPC
+https://mp.weixin.qq.com/s?__biz=MzI5ODQ2MzI3NQ==&mid=2247488584&idx=1&sn=c54d1659f1be735425f446b37d61b957&chksm=eca42d0cdbd3a41a7e9b7e1430b841018d1bca2ac40c12d7ff014b5817211b9e10d0cbec7f11&scene=27#wechat_redirect
+
+
+
+你可以尝试用同一个语言在客户端和服务端构建并运行例子。或者你可以尝试 gRPC 最有用的一个功能 - 不同的语言间的互操作性，即在不同的语言运行客户端和服务端。每个服务端和客户端使用从同一过 proto 文件生成的接口代码，则意味着任何 Greeter 客户端可以与任何 Greeter 服务端对话。
+
+
+
+HTTP2 协议上的 gRPC
+
+对请求来讲，EOS (end-of-stream)以最后接收到的数据帧出现 END_STREAM 标志为准。
+在请求流需要关闭但是没有数据继续发送的情况下，代码必须发送包含这个标志的空数据帧。
+
+
+
+附录 A - Protobuf 上的 GRPC
+用 protobuf 定义的服务接口可以通过 protoc 的代码生成扩展简单地映射成 GRPC ，以下定义了所用的映射：
+
+路径 → / 服务名 / {方法名}
+
+服务名 → ?( {proto 包名} "." ) {服务名}
+
+消息类型 → {全路径 proto 消息名}
+
+内容类型 → "application/grpc+proto"
+
+
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+syntax = "proto3"; // 语法版本
+
+// stub选项
+// 这个指定的包是为我们生成 Java 类使用的。如果在 .proto 文件中没有显示的 java_package 参数，那么就会使用缺省的 proto 包（通过 "package" 关键字指定）。但是，因为 proto 包一般不是以域名翻转的格式命名，所以它不是好的 Java 包。 如果我们用其它语言通过 .proto 文件生成代码，java_package 是不起任何作用的。
+option java_package = "com.xiangzi.service";
+option java_outer_classname = "RpcDateServiceApi";
+option java_multiple_files = true;
+
+// 定义包名
+package com.xiangzi.service.api;
+
+// 服务接口定义，服务端和客户端都要遵守该接口进行通信
+service RpcDateService {
+  rpc getDate (RpcDateRequest) returns (RpcDateResponse) {}
+}
+
+// 定义消息（请求）
+message RpcDateRequest {
+  string userName = 1;
+}
+
+// 定义消息（响应）
+message RpcDateResponse {
+  string serverDate = 1;
+}
